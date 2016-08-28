@@ -53,18 +53,22 @@ namespace kMeans
             for (int i = 0; i < classifications; i++)
             {
                 int key = rndKey.Next(0, dataPoints.Length);
+                Console.WriteLine("RANDOM KEY: " + key);
                 Dictionary<string, double> temp = centroids[i];
-                /*foreach (KeyValuePair<string, double> k in temp)
-
+                int cont = 0;
+                Console.WriteLine("Centroid " + i);
+                foreach (KeyValuePair<string, double> k in dataPoints[key].categories)
                 {
                     centroids[i][k.Key] = dataPoints[key].getCategory(k.Key);
-                }*/
-                var enumerator = dataPoints[0].categories.GetEnumerator();
+                    //Console.WriteLine(cont + ": " + centroids[i][k.Key]);
+                    cont++;
+                }
+                /*var enumerator = dataPoints[0].categories.GetEnumerator();
                 while (enumerator.MoveNext())
                 {
                     var pair = enumerator.Current;
                     centroids[i][pair.Key] = dataPoints[key].getCategory(pair.Key);
-                }
+                }*/
             }
         }
 
@@ -74,9 +78,10 @@ namespace kMeans
         {
             int numberOfCentroids = centroids.Length;
 
-            Console.WriteLine("iteration");
+            Console.WriteLine("ITERATION");
             for (int i = 0; i < dataPoints.Length; i++)
             {
+                Console.WriteLine("Foto " + i + " ");
                 double minDistance = 9999999;
                 for (int j = 0; j < numberOfCentroids; j++)
                 {
@@ -94,6 +99,9 @@ namespace kMeans
                         dataPoints[i].setCentroid(j);
                     }
                 }
+
+
+
             }
         }
 
@@ -160,11 +168,14 @@ namespace kMeans
 
             for (int i = 0; i < imageDetails.Length; i++)
             {
+                Console.WriteLine("Photo " + i);
+                int cont = 0;
                 if (imageDetails[i] != null)
                 {
                     foreach (KeyValuePair<string, double> k in imageDetails[i])
                     {
                         dataPoints[i].setCategory(k.Key, k.Value);
+                        Console.WriteLine(cont + ": " + dataPoints[i].getCategory(k.Key));
                     }
                 }
             }

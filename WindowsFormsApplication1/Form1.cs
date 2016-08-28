@@ -26,13 +26,14 @@ namespace WindowsFormsApplication1
     public partial class Form1 : Form
     {
         Image[] image = new Image[10];
-        Dictionary<string, double>[] imageDetails;
+        Dictionary<string, double>[] imageDetails = new Dictionary<string, double>[5];
         string[] categoryArr = new string[86];
         string[] images;
         int imageUpIndex = 0;
         int imageSendIndex = 0;
         kMeansAlg kProcess = new kMeansAlg();
         int pos;
+        int clickIndex = 0;
 
         public Form1()
         {
@@ -49,7 +50,7 @@ namespace WindowsFormsApplication1
         }
         
 
-        async void MakeRequest()
+        private async Task MakeRequest()
         {
             var client = new HttpClient();
             var queryString = HttpUtility.ParseQueryString(string.Empty);
@@ -89,7 +90,7 @@ namespace WindowsFormsApplication1
                     //Console.WriteLine(json["categories"]);
                 }
 
-
+                clickIndex++;
 
             }
 
@@ -148,13 +149,11 @@ namespace WindowsFormsApplication1
 
         private void button2_Click(object sender, EventArgs e)
         {
-            imageDetails = new Dictionary<string, double>[imageUpIndex];
+            //imageDetails = new Dictionary<string, double>[imageUpIndex];
             images = new string[imageUpIndex];
-            for (int i = 0; i < imageUpIndex; i++)
-            {
-                pos = i;
-                MakeRequest();
-            }
+            pos = clickIndex;
+            MakeRequest();
+
 
             
             
@@ -176,7 +175,7 @@ namespace WindowsFormsApplication1
                 Console.WriteLine(imageDetails[i]);
             }
 
-            c = kProcess.kMeans(categoryArr, imageDetails, 15, 2);
+            c = kProcess.kMeans(categoryArr, imageDetails, 5, 3);
 
             Console.WriteLine("Ends K Means");
 
