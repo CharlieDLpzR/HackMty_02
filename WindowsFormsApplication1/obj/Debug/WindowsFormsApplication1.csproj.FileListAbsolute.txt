@@ -7,3 +7,14 @@ c:\users\carlos\documents\visual studio 2015\Projects\WindowsFormsApplication1\W
 c:\users\carlos\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.pdb
 c:\users\carlos\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
 c:\users\carlos\documents\visual studio 2015\Projects\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
+D:\TEC\HACKMTY_02\HackMty_02\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe.config
+D:\TEC\HACKMTY_02\HackMty_02\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
+D:\TEC\HACKMTY_02\HackMty_02\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
+D:\TEC\HACKMTY_02\HackMty_02\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe
+D:\TEC\HACKMTY_02\HackMty_02\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.pdb
+D:\TEC\HACKMTY_02\HackMty_02\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csprojResolveAssemblyReference.cache
+D:\TEC\HACKMTY_02\HackMty_02\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
+D:\TEC\HACKMTY_02\HackMty_02\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csproj.GenerateResource.Cache
+D:\TEC\HACKMTY_02\HackMty_02\WindowsFormsApplication1\bin\Debug\Newtonsoft.Json.dll
+D:\TEC\HACKMTY_02\HackMty_02\WindowsFormsApplication1\bin\Debug\Newtonsoft.Json.xml
+D:\TEC\HACKMTY_02\HackMty_02\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Form1.resources

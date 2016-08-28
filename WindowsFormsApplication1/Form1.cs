@@ -11,23 +11,48 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Net.Http;
 using System.Drawing.Imaging;
+using kMeans;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
+using System.Web.Script.Serialization;
+using System.Collections;
+using Newtonsoft.Json.Linq;
+using System.Threading;
 
 namespace WindowsFormsApplication1
 {
+
     public partial class Form1 : Form
     {
-        Image image;
-        
+        Image[] image = new Image[10];
+        Dictionary<string, double>[] imageDetails;
+        string[] categoryArr = new string[86];
+        string[] images;
+        int imageUpIndex = 0;
+        int imageSendIndex = 0;
+        kMeansAlg kProcess = new kMeansAlg();
+        int pos;
+
         public Form1()
         {
             InitializeComponent();
+            string line;
+            int count = 0;
+            StreamReader file = new StreamReader(@"../../Categories.txt");
+            while ((line = file.ReadLine()) != null)
+            {
+                categoryArr[count] = line;
+                count++;
+            }
+            file.Close();
         }
+        
 
         async void MakeRequest()
         {
             var client = new HttpClient();
             var queryString = HttpUtility.ParseQueryString(string.Empty);
-
             // Request headers
             client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", "afc64e5450324b0d9ad0a147faa4a43c");
 
@@ -41,16 +66,35 @@ namespace WindowsFormsApplication1
 
             // Request body
             ImageConverter _imageConverter = new ImageConverter();
-            byte[] byteData = (byte[])_imageConverter.ConvertTo(image, typeof(byte[]));
+            byte[] byteData = (byte[])_imageConverter.ConvertTo(image[pos], typeof(byte[]));
+            imageSendIndex++;
+
+            Console.WriteLine("ENTRA");
 
             using (var content = new ByteArrayContent(byteData))
             {
+
                 content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
                 response = await client.PostAsync(uri, content);
-                textBox1.Text = await response.Content.ReadAsStringAsync();
+                images[pos] = await response.Content.ReadAsStringAsync();
+
+                JObject json = new JObject();
+                json = JObject.Parse(images[pos]);
+                Console.WriteLine((json));
+                imageDetails[pos] = new Dictionary<string, double>();
+                for (int i = 0; i < json["categories"].Count(); i++)
+                {
+                    imageDetails[pos][(string)json["categories"][i]["name"]] = (double)(json["categories"][i]["score"]);
+
+                    //Console.WriteLine(json["categories"]);
+                }
+
+
+
             }
 
         }
+
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -72,16 +116,20 @@ namespace WindowsFormsApplication1
 
             if (ofd.ShowDialog() == DialogResult.OK && ofd.FileName.Length > 0)
             {
-                pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
-                pictureBox1.Image = Image.FromFile(ofd.FileName);
-                image = Image.FromFile(ofd.FileName);
+
+                dataGridView1.Rows.Add();
+                dataGridView1.Rows[imageUpIndex].Cells[0].Value = new Bitmap(ofd.FileName);
+                ((DataGridViewImageColumn)dataGridView1.Columns[0]).ImageLayout = DataGridViewImageCellLayout.Zoom;
+                dataGridView1.Rows[imageUpIndex].Height = 100;
+                image[imageUpIndex] = Image.FromFile(ofd.FileName);
                 location = ofd.FileName;
-                
-                if (ImageFormat.Jpeg.Equals(image.RawFormat))
+
+
+                if (ImageFormat.Jpeg.Equals(image[imageUpIndex].RawFormat))
                 {
                     textBox1.Text = "exito";
                 }
-                else if(ImageFormat.Png.Equals(image.RawFormat))
+                else if (ImageFormat.Png.Equals(image[imageUpIndex].RawFormat))
                 {
                     textBox1.Text = "png";
                 }
@@ -89,6 +137,8 @@ namespace WindowsFormsApplication1
                 {
                     textBox1.Text = "falso";
                 }
+                imageUpIndex++;
+
             }
         }
 
@@ -98,7 +148,43 @@ namespace WindowsFormsApplication1
 
         private void button2_Click(object sender, EventArgs e)
         {
-            MakeRequest();
+            imageDetails = new Dictionary<string, double>[imageUpIndex];
+            images = new string[imageUpIndex];
+            for (int i = 0; i < imageUpIndex; i++)
+            {
+                pos = i;
+                MakeRequest();
+            }
+
+            
+            
+
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var dgv = new DataGridView();
+            dgv.RowTemplate.MinimumHeight = 100;
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            int[] c = new int[imageUpIndex];
+
+            for(int i = 0; i < imageUpIndex; i++)
+            {
+                Console.WriteLine(imageDetails[i]);
+            }
+
+            c = kProcess.kMeans(categoryArr, imageDetails, 15, 2);
+
+            Console.WriteLine("Ends K Means");
+
+            for (int i = 0; i < imageUpIndex; i++)
+            {
+                Console.WriteLine(c[i]);
+            }
         }
     }
 }
+
